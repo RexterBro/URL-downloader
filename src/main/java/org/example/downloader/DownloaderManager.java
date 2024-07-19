@@ -2,51 +2,56 @@ package org.example.downloader;
 
 import lombok.SneakyThrows;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.concurrent.*;
 
 public class DownloaderManager implements Runnable {
-    private final List<UrlDownloader> downloaders;
-    private final int maxTime;
+    private final Map<UrlDownloader, CompletableFuture<?>> downloaderToFuture;
+    private final Config config;
 
     private final ExecutorService executorService;
 
     public DownloaderManager(Config config) {
-        downloaders = new ArrayList<>();
-        config.urls.forEach(url -> downloaders.add(new UrlDownloader(url, config.outputDir)));
-        maxTime = config.maxTime;
+        downloaderToFuture = new ConcurrentHashMap<>();
         executorService = Executors.newFixedThreadPool(config.maxConcurrentDownloads);
+        this.config = config;
     }
 
     @SneakyThrows
     @Override
     public void run() {
         long startTime = System.currentTimeMillis();
-        CompletableFuture<Void> allTasks = getAllDownloadsFuture();
-        allTasks.whenComplete((unused, throwable) -> {
+        initDownloaders();
+        CompletableFuture<Void> downloadTask = CompletableFuture.allOf(downloaderToFuture.values().toArray(new CompletableFuture[0]));
+
+        ScheduledExecutorService maxtimeCheckExecutor = Executors.newSingleThreadScheduledExecutor();
+        maxtimeCheckExecutor.schedule(() ->
+                downloaderToFuture.forEach((urlDownloader, completableFuture) -> {
+                    if (!completableFuture.isDone()) {
+                        System.out.println(String.format("Cancelling download %s due to passing the maximum allowed time", urlDownloader.getUrl()));
+                        urlDownloader.cancelDownload();
+                    }
+                }), config.maxTime, TimeUnit.SECONDS);
+
+        downloadTask.whenComplete((unused, throwable) -> {
+            maxtimeCheckExecutor.shutdownNow();
             executorService.shutdown();
             System.out.println("finished downloads");
-            System.out.printf("Overall time %d seconds",
-                    TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime));
+            System.out.println(String.format("Overall time %d seconds",
+                    TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime)));
         });
     }
 
-    private CompletableFuture<Void> getAllDownloadsFuture() {
-        List<CompletableFuture<?>> completableFutures = new ArrayList<>();
-        for (UrlDownloader downloader : downloaders) {
+    private void initDownloaders() {
+        for (String url : config.urls) {
+            UrlDownloader downloader = new UrlDownloader(url, config.outputDir);
             CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(downloader, executorService);
             completableFuture.whenComplete((unused, throwable) -> {
-                if (throwable != null) {
-                    System.out.printf("download of url %s failed%n", downloader.getUrl());
+                if(throwable!=null) {
+                    System.out.println(String.format("download of url %s failed", downloader.getUrl()));
                 }
             });
-            completableFutures.add(completableFuture);
+            downloaderToFuture.put(downloader, completableFuture);
         }
-
-        return CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[0]));
     }
 }

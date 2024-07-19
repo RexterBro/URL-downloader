@@ -8,11 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 public class Config {
-    public List<String> urls;
+    public Set<String> urls;
     public int maxTime;
     public String outputDir;
     public int maxConcurrentDownloads;

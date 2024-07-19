@@ -1,9 +1,9 @@
 {
   "urls": [
-    "https://github.com/apache/kafka/blob/trunk/docs/images/consumer-groups.png",
-    "https://github.com/apache/kafka/blob/trunk/docs/images/consumer-groups.pn321321312g"
+    "https://app.getambassador.io/download/tel2oss/releases/download/v2.19.1-rc.1/telepresence-linux-amd64",
+    "https://raw.githubusercontent.com/apache/kafka/trunk/docs/images/consumer-groups.png"
   ],
-  "maxTime": 60,
+  "maxTime": 5,
   "outputDir": ".\\src",
   "maxConcurrentDownloads": 4
 }
