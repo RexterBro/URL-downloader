@@ -1,0 +1,9 @@
+{
+  "urls": [
+    "https://github.com/apache/kafka/blob/trunk/docs/images/consumer-groups.png",
+    "https://github.com/apache/kafka/blob/trunk/docs/images/consumer-groups.pn321321312g"
+  ],
+  "maxTime": 60,
+  "outputDir": ".\\src",
+  "maxConcurrentDownloads": 4
+}
