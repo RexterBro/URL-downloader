@@ -10,6 +10,9 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Configuration for the DownloadManager
+ */
 @Data
 @NoArgsConstructor
 public class Config {

@@ -1,9 +1,10 @@
 {
   "urls": [
-    "https://app.getambassador.io/download/tel2oss/releases/download/v2.19.1-rc.1/telepresence-linux-amd64",
-    "https://raw.githubusercontent.com/apache/kafka/trunk/docs/images/consumer-groups.png"
+    "https://raw.githubusercontent.com/apache/kafka/trunk/docs/images/consumer-groups.png",
+    "https://app.getambassador.io/download/tel2oss/releases/download/v2.19.1/telepresence-linux-arm64",
+    "https://app.getambassador.io/download/tel2oss/releases/download/v2.19.1/telepresence-linux-amd64"
   ],
-  "maxTime": 5,
+  "maxTime": 60,
   "outputDir": ".\\src",
   "maxConcurrentDownloads": 4
 }

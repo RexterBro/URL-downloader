@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
-public class UrlDownloader implements Runnable {
+class UrlDownloader implements Runnable {
     private final String url;
     private final String outputDir;
     private final AtomicBoolean keepDownload;
@@ -30,7 +30,7 @@ public class UrlDownloader implements Runnable {
     @Override
     public void run() {
         long startTime = System.currentTimeMillis();
-        String outputFileName = String.format("%s\\%s", outputDir, FilenameUtils.getName(url));
+        String outputFileName = String.format("%s%s%s", outputDir, File.separator, FilenameUtils.getName(url));
 
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(outputFileName)) {
@@ -39,6 +39,9 @@ public class UrlDownloader implements Runnable {
             while (keepDownload.get() && ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1)) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
             }
+
+
+            fileOutputStream.flush();
         } catch (RuntimeException | IOException e) {
             throw new RuntimeException(e);
         } finally {
