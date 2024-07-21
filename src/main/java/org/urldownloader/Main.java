@@ -1,7 +1,7 @@
-package org.example;
+package org.urldownloader;
 
-import org.example.downloader.Config;
-import org.example.downloader.DownloaderManager;
+import org.urldownloader.downloader.Config;
+import org.urldownloader.downloader.DownloaderManager;
 
 import java.io.File;
 import java.io.IOException;

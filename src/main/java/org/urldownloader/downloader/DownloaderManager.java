@@ -1,4 +1,4 @@
-package org.example.downloader;
+package org.urldownloader.downloader;
 
 import lombok.SneakyThrows;
 

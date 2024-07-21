@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'org.example'
@@ -13,10 +14,15 @@ dependencies {
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.11.0'
     implementation group: 'com.google.guava', name: 'guava', version: '33.2.1-jre'
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.34'
+    annotationProcessor  group: 'org.projectlombok', name: 'lombok', version: '1.18.34'
     implementation group: 'commons-io', name: 'commons-io', version: '2.16.1'
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+application {
+    mainClass = 'org.urldownloader.Main'
 }
 
 test {
