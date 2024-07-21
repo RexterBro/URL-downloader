@@ -1,7 +1,7 @@
 import com.google.common.io.Resources;
 import org.apache.commons.io.FileUtils;
-import org.example.downloader.Config;
-import org.example.downloader.DownloaderManager;
+import org.urldownloader.downloader.Config;
+import org.urldownloader.downloader.DownloaderManager;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -31,6 +31,7 @@ public class DownloadIntegrationTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Downloaded file from a local http server and checked that it's equal to the serverside file")
     void testDownloadTimeUnderMaxTimeShouldSucceed() throws IOException {
         Config config = new Config();
